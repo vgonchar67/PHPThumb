@@ -101,6 +101,9 @@ class GD extends PHPThumb
             case 'PNG':
                 $this->oldImage = imagecreatefrompng($this->fileName);
                 break;
+            case 'WebP':
+                $this->oldImage = imagecreatefromwebp($this->fileName);
+                break;
             case 'STRING':
                 $this->oldImage = imagecreatefromstring($this->fileName);
                 break;
@@ -913,7 +916,7 @@ class GD extends PHPThumb
      */
     public function save($fileName, $format = null)
     {
-        $validFormats = array('GIF', 'JPG', 'PNG');
+        $validFormats = array('GIF', 'JPG', 'PNG', 'WebP');
         $format = ($format !== null) ? strtoupper($format) : $this->format;
 
         if (!in_array($format, $validFormats)) {
@@ -951,6 +954,9 @@ class GD extends PHPThumb
                 break;
             case 'PNG':
                 imagepng($this->oldImage, $fileName);
+                break;
+            case 'WebP':
+                imagewebp($this->oldImage, $fileName);
                 break;
         }
 
@@ -1330,6 +1336,9 @@ class GD extends PHPThumb
             case 'image/png':
                 $this->format = 'PNG';
                 break;
+            case 'image/webp':
+                $this->format = 'WebP';
+                break;
             default:
                 throw new \Exception("Image format not supported: {$mimeType}");
         }
@@ -1352,6 +1361,9 @@ class GD extends PHPThumb
                 $isCompatible = (isset($gdInfo['JPG Support']) || isset($gdInfo['JPEG Support'])) ? true : false;
                 break;
             case 'PNG':
+                $isCompatible = $gdInfo[$this->format . ' Support'];
+                break;
+            case 'WebP':
                 $isCompatible = $gdInfo[$this->format . ' Support'];
                 break;
             default:
