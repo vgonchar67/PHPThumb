@@ -1392,7 +1392,7 @@ class GD extends PHPThumb
      */
     protected function preserveAlpha()
     {
-        if ($this->format == 'PNG' && $this->options['preserveAlpha'] === true) {
+        if (in_array($this->format, ['PNG', 'WebP']) && $this->options['preserveAlpha'] === true) {
             imagealphablending($this->workingImage, false);
 
             $colorTransparent = imagecolorallocatealpha(
